@@ -89,6 +89,7 @@ app.post("/add-item", async (req, res) => {
         parsedDate.setDate(parsedDate.getDate() + parseInt(newItem.daysLeft));
         newItem.expirationDate = parsedDate.toISOString();
         newItem.calories = parseInt(await getCalories((newItem.itemName || ""), (newItem.brand || "")));
+        newItem.disposalSuggestion = await getDisposalSuggestion(newItem.itemName || ""), (newItem.brand || "");
     
         await newItem.save();
         res.status(201).json({ message: "Item added successfully!" });

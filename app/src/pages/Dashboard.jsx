@@ -8,11 +8,42 @@ function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 4;
+    const itemNameToEmoji = {
+        "strawberry": "🍓",
+        "banana": "🍌",
+        "apple": "🍎",
+        "carrot": "🥕",
+        "bread": "🍞",
+        "cheese": "🧀",
+        "watermelon": "🍉",
+        "pear": "🍐",
+        "blueberry": "🫐",
+        "chicken": "🍗",
+        "fish": "🐟",
+        "milk": "🥛",
+        "egg": "🥚",
+    };
+
+    const categoryToEmoji = {
+        "fruits": "🍇",
+        "vegetables": "🥦",
+        "dairy": "🧈",
+        "meat": "🥩",
+        "seafood": "🦐",
+        "grains": "🌾",
+        "beverages": "🧃",
+    };
     const username = "User"; // Replace with dynamic username if needed
 
     useEffect(() => {
         fetchData();
     }, []);
+
+    const getItemEmoji = (item) => {
+        return itemNameToEmoji[item._doc.itemName.toLowerCase()] || categoryToEmoji[item._doc.category.toLowerCase()] || "❓";
+    };
 
     const fetchData = async () => {
         setLoading(true);
@@ -31,6 +62,10 @@ function Dashboard() {
     const handleAddItem = (newItem) => {
         setItems([...items, newItem]);
     };
+
+    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const displayedItems = items.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
 
     return (
         <div className="dashboard-container" style={{
@@ -89,7 +124,7 @@ function Dashboard() {
                 </div>
             )}
 
-            <div style={{ marginTop: '50px', width: '80%' }}>
+            {/* <div style={{ marginTop: '50px', width: '80%', display: 'flex', justifyContent: "center", alignItems: "center"}}>
                 {items.map((item, index) => (
                     <div 
                         key={index} 
@@ -104,7 +139,8 @@ function Dashboard() {
                         onMouseEnter={() => setHoveredItem(item)}
                         onMouseLeave={() => setHoveredItem(null)}
                     >
-                        {item.itemName} ({item.brand})
+                        <span style ={{ fontSize: "130px"}}>{getItemEmoji(item)}</span>
+                        <span>{item._doc.itemName} {item._doc.brand ? item._doc.brand : ""}</span>
 
                         {hoveredItem === item && (
                             <div style={{
@@ -119,14 +155,100 @@ function Dashboard() {
                                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                                 zIndex: 100
                             }}>
-                                <p><strong>Expiration Days:</strong> {item.daysLeft}</p>
-                                <p><strong>Disposal Suggestion:</strong> {item.disposalSuggestion}</p>
-                                <p><strong>Calories:</strong> {item.calories}</p>
+                                <p><strong>Expiration Days:</strong> {item._doc.daysLeft}</p>
+                                <p><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion}</p>
+                                <p><strong>Calories:</strong> {item._doc.calories}</p>
                             </div>
                         )}
                     </div>
                 ))}
-            </div>
+            </div> */}
+            <div style={{ marginTop: '50px', width: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* Left Button */}
+                    <button 
+                        onClick={() => setCurrentPage(prev => prev > 0 ? prev - 1 : prev)}
+                        disabled={currentPage === 0}
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            fontSize: "24px",
+                            cursor: currentPage === 0 ? "not-allowed" : "pointer",
+                            marginRight: '10px',
+                            color: 'black',
+                            opacity: currentPage === 0 ? '0' : '1'
+                        }}>
+                        ←
+                    </button>
+                    
+                    {/* Items container */}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '20px',
+                        flexWrap: 'wrap',
+                        flex: 1,
+                    }}>
+                        {displayedItems.map((item, index) => (
+                            <div 
+                                key={index} 
+                                style={{
+                                    padding: '10px',
+                                    background: 'rgba(255, 255, 255, 0)',
+                                    margin: '10px',
+                                    cursor: 'pointer',
+                                    borderRadius: '5px',
+                                    position: 'relative',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center'
+                                }}
+                                onMouseEnter={() => setHoveredItem(item)}
+                                onMouseLeave={() => setHoveredItem(null)}
+                            >
+                                <span style={{ fontSize: "130px" }}>{getItemEmoji(item)}</span>
+                                <span style={{color: "black", fontSize: "50px"}}>
+                                    {item._doc.itemName} {(item._doc.brand) || ""}
+                                </span>
+
+                                {hoveredItem === item && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: '100%',
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        background: 'white',
+                                        color: 'black',
+                                        padding: '10px',
+                                        borderRadius: '5px',
+                                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                        zIndex: 100
+                                    }}>
+                                        <p><strong>Expiration Days:</strong> {item._doc.daysLeft}</p>
+                                        <p><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion}</p>
+                                        <p><strong>Calories:</strong> {item._doc.calories}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Right Button */}
+                    <button 
+                        onClick={() => setCurrentPage(prev => prev < totalPages - 1 ? prev + 1 : prev)}
+                        disabled={currentPage >= totalPages - 1}
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            fontSize: "24px",
+                            cursor: currentPage >= totalPages - 1 ? "not-allowed" : "pointer",
+                            marginLeft: '10px',
+                            color: 'black',
+                            opacity: currentPage >=totalPages -1 ? '0' : '1'
+                        }}>
+                        →
+                    </button>
+                </div>
         </div>
     );
 }
