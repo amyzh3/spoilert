@@ -79,6 +79,18 @@ app.post("/add-item", async (req, res) => {
     }
   });
 
+  // get all items
+app.get("/get-all-items", async (req, res) => {
+  try {
+    const items = await Item.find({});
+
+    console.log(items);
+    res.status(200).json({items})
+  }catch (error) {
+    res.status(500).json({ error: "Failed to get all items"})
+  }
+})
+
 // home route
 app.get('/', (req, res) => {
     res.send('Hello Express server is running!');
