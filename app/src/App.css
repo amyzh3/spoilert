@@ -45,14 +45,14 @@
 
 .progress-bar-container {
   width: 100%;
-  background-color: #e0e0e0;
+  background-color: #b7b7b7;
   border-radius: 5px;
   margin-top: 10px;
 }
 
 .progress-bar {
   height: 10px;
-  background-color: #4caf50;
+  background-color: #49A93C;
   border-radius: 5px;
 }
 

@@ -11,6 +11,19 @@ function Dashboard({ user }) {
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 4;
 
+    // calculations for the progress bar
+    const calculateProgress = (dateAdded, daysLeft) => {
+        const currentDate = new Date();
+        const addedDate = new Date(dateAdded);
+        const expirationDate = new Date(addedDate);
+        expirationDate.setDate(expirationDate.getDate() + daysLeft);
+
+        const totalDays = (expirationDate - addedDate) / (1000 * 60 * 60 * 24);
+        const remainingDays = (expirationDate - currentDate) / (1000 * 60 * 60 * 24);
+
+        return Math.max(0, Math.min(100, (remainingDays / totalDays) * 100));
+    };
+
     const itemNameToEmoji = {
         "strawberry": "🍓",
         "banana": "🍌",
@@ -163,38 +176,50 @@ function Dashboard({ user }) {
                     flexWrap: 'wrap',
                     flex: 1,
                 }}>
-                    {displayedItems.map((item, index) => (
-                        <div 
-                            key={index} 
-                            style={{
-                                padding: '10px',
-                                background: 'rgba(255, 255, 255, 0)',
-                                margin: '10px',
-                                cursor: 'pointer',
-                                borderRadius: '5px',
-                                position: 'relative',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center'
-                            }}
-                            onMouseEnter={() => setHoveredItem(item)}
-                            onMouseLeave={() => setHoveredItem(null)}
-                        >
-                            {
-                                item._doc.brand && item._doc.brand.length > 0 ? <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>
-                                 : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
-                            }
-                            {/* {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>} */}
-                            <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
-                            <span style={{ fontSize: "130px"}}>
+                    {displayedItems.map((item, index) => {
+                        const progress = calculateProgress(item._doc.dateAdded, item._doc.daysLeft);
+                        let progressBarColor = 'green';
+
+                        if (progress <= 50) {
+                            progressBarColor = 'yellow';
+                        }
+                        
+                        if (progress <= 25) {
+                            progressBarColor = 'red';
+                        }
+
+                        return (
+                            <div 
+                                key={index} 
+                                style={{
+                                    padding: '10px',
+                                    background: 'rgba(255, 255, 255, 0)',
+                                    margin: '10px',
+                                    cursor: 'pointer',
+                                    borderRadius: '5px',
+                                    position: 'relative',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center'
+                                }}
+                                onMouseEnter={() => setHoveredItem(item)}
+                                onMouseLeave={() => setHoveredItem(null)}
+                            >
+                                {
+                                    item._doc.brand && item._doc.brand.length > 0 ? <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>
+                                    : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
+                                }
+                                {/* {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>} */}
+                                <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
+                                <span style={{ fontSize: "130px"}}>
                                 {item.expired ? '🕳️' : getItemEmoji(item)}
                             </span>
 
-                            {/* Progress Bar Wrapper */}
-                            <div className="progress-bar-container">
-                                <div className="progress-bar" style={{ width: `${item._doc.progress}%` }}></div>
-                            </div>
-                           
+                                {/* Progress Bar Wrapper */}
+                                <div className="progress-bar-container">
+                                    <div className="progress-bar" style={{ width: `${calculateProgress(item._doc.dateAdded, item._doc.daysLeft)}%` }}></div>
+                                </div>
+                            
 
                             {hoveredItem === item && (
                                 <div style={{
@@ -209,13 +234,13 @@ function Dashboard({ user }) {
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                                     zIndex: 100
                                 }}>
-                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item.daysLeft || 'Unknown'}</p>
-                                    <p style={{ color: '#343A40' }}><strong>Expiration Date:</strong> {item._doc.expirationDate ? formatDate(item._doc.expirationDate) : 'Unknown'}</p> {/* Updated to format expiration date */}
+                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item._doc.daysLeft || 'Unknown'}</p>
                                     <p style={{ color: '#343A40' }}><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion || 'N/A'}</p>
                                     <p style={{ color: '#343A40' }}><strong>Calories:</strong> {item._doc.calories || 'N/A'}</p>
                                 </div>
                             )}
                         </div>
+
                     ))}
                 </div>
 
