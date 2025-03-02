@@ -109,7 +109,7 @@ function Dashboard({ user }) {
 
     const handleRemoveOne = async (itemId) => {
         try {
-            await axios.post('http://localhost:8000/remove-one', { itemId });
+            await axios.post('http://localhost:8000/subtract-one', { itemId });
             fetchData(); 
         } catch (error) {
             console.error('Error removing one:', error);

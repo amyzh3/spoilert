@@ -187,22 +187,20 @@ app.get('/', (req, res) => {
 app.post('/subtract-one', async (req, res) => {
     try {
         const { itemId } = req.body;
-        if (!mongoose.Types.ObjectId.isValid(itemId)) {
-            return res.status(400).json({ error: "Invalid ObjectId format" });
-        }
+
         // get item
-        const item = await Item.findById(itemID);
+        const item = await Item.findById(itemId);
         if (!item) {
             return res.status(404).json({ error: "Item not found" });
         }
         // if item's unit is 1, delete item
         if (item.units === 1) {
-            await Item.findByIdAndDelete(itemID);
+            await Item.findByIdAndDelete(itemId);
             return res.status(200).json({ message: "Item removed from inventory." });
         }
         // Otherwise, decrement units of item
         const updatedItem = await Item.findByIdAndUpdate(
-            itemID,
+            itemId,
             { $inc: { units: -1 } },
         );
         if (!updatedItem) {
