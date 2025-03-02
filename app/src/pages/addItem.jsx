@@ -4,6 +4,7 @@ import './AddItem.css'
 function AddItemPage({ onClose }) {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [newItemData, setNewItemData] = useState({
     itemName: "",
     units: "",
@@ -28,15 +29,23 @@ function AddItemPage({ onClose }) {
     e.preventDefault();
     console.log("Submitted Data:", newItemData);
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:8000/add-item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newItemData),
       });
       const data = await response.json();
-      alert(data.message || "Error adding item");
-      alert("Item added successfully!");
+      setLoading(false);
+
+      if (response.ok) {
+          alert(data.message || "Item added successfully!");
+          onClose();
+      } else {
+          alert(data.message || "Error adding item");
+      }
     } catch (error) {
+      setLoading(false);
       console.error("Error:", error);
     }
     
@@ -55,6 +64,7 @@ function AddItemPage({ onClose }) {
       {/* New Form Section */}
       <div className="form-container">
         <h2 style={{marginTop: '0'}} className="header-color">Add Food Item</h2>
+        <div className={`loading-spinner ${loading ? 'visible' : 'hidden'}`}>Loading...</div>
         <form onSubmit={handleSubmit}>
           <label className="form-item">
             <div className="add-item-mainlabels">Item Name <span className="required-asterisk">*</span></div>

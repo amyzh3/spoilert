@@ -133,3 +133,25 @@
   border-radius: 10px;
   font-weight: 600;
 }
+
+.loading-spinner {
+  visibility: hidden; 
+  opacity: 0; 
+  transition: visibility 0s, opacity 0.3s ease;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #427AA1;
+  font-size: 16px;
+}
+.loading-spinner.visible {
+  visibility: visible; 
+  opacity: 1;
+}
+
+.loading-spinner.hidden {
+  visibility: hidden; 
+  opacity: 0; 
+}
