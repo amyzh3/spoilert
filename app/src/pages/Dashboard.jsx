@@ -165,7 +165,7 @@ function Dashboard({ user }) {
         }}>
             <h1 style={{
                 position: 'absolute',
-                top: '-15px',
+                top: '-25px',
                 left: '20px',
                 fontSize: '40px',
                 fontWeight: 'bold',
@@ -179,7 +179,7 @@ function Dashboard({ user }) {
                 onClick={() => setShowPopup(true)}
                 style={{
                     position: 'absolute',
-                    top: '20px',
+                    top: '15.5px',
                     right: '20px',
                     backgroundColor: '#427AA1',
                     color: 'white',
@@ -191,7 +191,7 @@ function Dashboard({ user }) {
                     fontFamily: 'Karla, sans-serif',
                     fontWeight: 'bold',
                 }}>
-                Add Food Item
+                + Add Food Item
             </button>
 
             {showPopup && (
