@@ -56,7 +56,7 @@ function Login({ setUser }) {
         style={{
           backgroundColor: "#CBD3DB",
           width: "90vh",
-          height: "60vh",
+          height: "75vh",
           zIndex: 1,
           display: "flex",
           flexDirection: "column",
@@ -66,13 +66,15 @@ function Login({ setUser }) {
           opacity: 0.8,
           borderRadius: "15px",
         }}
-      >
+      >      
+      <img style={{width: '300px'}} src="public/spoilert.png" />
         <h2
           style={{
             color: "#343A40",
             textShadow: "0",
             fontWeight: "bold",
             fontSize: "36px",
+            marginTop: "0px",
           }}
         >
           Login to Your Account

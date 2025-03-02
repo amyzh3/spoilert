@@ -50,7 +50,7 @@ function Signup({ setUser }) {
     <div style={{
       backgroundColor: '#CBD3DB',
       width: '90vh',
-      height: '60vh',
+      height: '75vh',
       zIndex: 1,
       display: 'flex',
       flexDirection: 'column', 
@@ -60,12 +60,16 @@ function Signup({ setUser }) {
       opacity: 0.8,
       borderRadius: '15px',
     }}>
-      <h2 style={{
-        color: '#343A40',
-        textShadow: '0',
-        fontWeight: 'bold',
-        fontSize: '36px',
-      }}>Sign up for a New Account</h2>
+      <img style={{width: '300px'}} src="public/spoilert.png" />
+        <h2
+          style={{
+            color: "#343A40",
+            textShadow: "0",
+            fontWeight: "bold",
+            fontSize: "36px",
+            marginTop: "0px",
+          }}
+        >Sign up for a New Account</h2>
       <form className="signup-form" onSubmit={handleSignup} style={{
                   marginTop: '40px',
                   display: 'flex', 
