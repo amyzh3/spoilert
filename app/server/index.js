@@ -102,9 +102,41 @@ app.post("/add-item", async (req, res) => {
 app.get("/get-all-items", async (req, res) => {
   try {
     const items = await Item.find({});
+    // sort items by expiration
+    const sortedItems = items.sort((a, b) => {
+        const currentDate = new Date();
+        
+        // convert dateAdded to Date object
+        const aDateAdded = new Date(a.dateAdded);
+        const bDateAdded = new Date(b.dateAdded);
+      
+        // compute remaining days
+        const aRemaining = a.daysLeft - Math.floor((currentDate - aDateAdded) / (1000 * 60 * 60 * 24));
+        const bRemaining = b.daysLeft - Math.floor((currentDate - bDateAdded) / (1000 * 60 * 60 * 24));
+      
+        return aRemaining - bRemaining; // sort least to greatest
+    });
 
-    console.log(items);
-    res.status(200).json({items})
+    const currentDate = new Date();
+
+      // calculate progress bar percentage
+    const updatedItems = sortedItems.map(item => {
+        const expirationDate = new Date(item.expirationDate);
+        
+        // calculate remaining time in milliseconds
+        const timeLeft = expirationDate - currentDate;
+        
+        // convert to days
+        const currDaysLeft = timeLeft / (1000 * 60 * 60 * 24);
+        
+        // calculate percentage
+        const percentage = currDaysLeft / item.daysLeft * 100;
+        // expired = true if it's after the expiration date
+        const expired = currentDate > expirationDate;
+        return { ...item, percentage, expired }; // Add percentage to item
+    });
+    console.log(updatedItems);
+    res.status(200).json({updatedItems})
   }catch (error) {
     res.status(500).json({ error: "Failed to get all items"})
   }
