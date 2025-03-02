@@ -108,10 +108,11 @@ function App() {
             Food Category:
             <select name="category" value={newItemData.category} onChange={handleChange}>
               <option value="fruits">Fruits</option>
-              <option value="vegetables">Vegetables</option>
+              <option value="veggies">Veggies</option>
               <option value="dairy">Dairy</option>
-              <option value="meat">Meat</option>
+              <option value="protein">protein</option>
               <option value="grains">Grains</option>
+              <option value="beverages">Beverages</option>
             </select>
           </label>
           <label>
