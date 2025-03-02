@@ -174,6 +174,34 @@ function Dashboard({ user }) {
                 width: '100%',
             }}>Hello, <span style={{color: '#427AA1'}}>{user || "Guest"}</span> 👋</h1>
             
+       {/* Streaks Display */}
+        <div style={{
+            position: 'absolute',
+            top: '60px',
+            right: '20px',
+            backgroundColor: 'white',
+            color: '#343A40',
+            padding: '8px 20px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease' /* Smooth transition for any change */
+        }}>
+            <span 
+                role="img" 
+                aria-label="fire" 
+                className="fire-emoji" 
+                style={{ marginRight: '8px' }} /* Add margin to the right of the emoji */
+            >
+                🔥
+            </span> 
+            Streak: {points}
+        </div>
+
             <button 
                 onClick={() => setShowPopup(true)}
                 style={{
