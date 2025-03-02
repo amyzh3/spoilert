@@ -144,20 +144,25 @@ function Dashboard() {
                 Add Food Item
             </button>
             {showPopup && (
-                <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    background: 'rgba(211, 217, 223, 0.9)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    padding: '30px',
-                    width: '400px',
-                    borderRadius: '15px',
-                    boxShadow: '0 6px 10px rgba(0, 0, 0, 0.15)'
-                }}>
-                    <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />
+                <div>
+                    <div className="popup-container">
+                        <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />
+                    </div>
+                    <div style={{
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: 'rgba(211, 217, 223, 0.9)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        padding: '30px',
+                        width: '400px',
+                        borderRadius: '15px',
+                        boxShadow: '0 6px 10px rgba(0, 0, 0, 0.15)'
+                    }}>
+                        <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />
+                    </div>
                 </div>
             )}
 
