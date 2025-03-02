@@ -31,7 +31,7 @@ function Home() {
         }}
       />
       <button 
-        onClick={() => navigate("/login")} // Ensure you're passing the function reference, not calling it directly
+        onClick={() => navigate("/signup")} // Ensure you're passing the function reference, not calling it directly
         style={{
           position: 'absolute',
           backgroundColor: 'white',

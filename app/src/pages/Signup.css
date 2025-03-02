@@ -1,0 +1,29 @@
+.input-label {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.input {
+  border: none;
+  margin-left: 10px;
+  padding: 10px;
+  width: 200px;
+  border-radius: 5px;
+  font-family: 'Karla', sans-serif; /* Set font family to Karla */
+  font-weight: 500;
+  color: #343A40;
+  font-size: 18px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  align-items: flex-end; /* Align inputs to the right */
+}
+
+.input-container > div {
+  display: flex; /* Place label and input on the same row */
+  align-items: center; /* Center vertically */
+  margin-bottom: 20px;
+}
