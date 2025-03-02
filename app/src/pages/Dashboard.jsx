@@ -311,7 +311,7 @@ function Dashboard({ user }) {
                                     : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
                                 }
                                 <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
-                                <span style={{ fontSize: "130px"}}>
+                                <span className="fruit-bounce" style={{ fontSize: "130px" }}>
                                 {item.expired ? '🕳️' : getItemEmoji(item)}
                             </span>
 
