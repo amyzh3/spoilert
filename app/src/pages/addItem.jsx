@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './AddItem.css'
 
-function AddItemPage({ onClose }) {
+function AddItem({ onClose }) {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,14 +36,9 @@ function AddItemPage({ onClose }) {
         body: JSON.stringify(newItemData),
       });
       const data = await response.json();
-      setLoading(false);
-
-      if (response.ok) {
-          alert(data.message || "Item added successfully!");
-          onClose();
-      } else {
-          alert(data.message || "Error adding item");
-      }
+          // alert(data.message || "Error adding item");
+      window.location.reload(); // Refresh the page
+      // }
     } catch (error) {
       setLoading(false);
       console.error("Error:", error);
@@ -128,4 +123,4 @@ function AddItemPage({ onClose }) {
   )
 }
 
-export default AddItemPage
+export default AddItem

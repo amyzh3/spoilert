@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import AddItem from './AddItem';
+import AddItem from './addItem';
 import axios from "axios";
 
 function Dashboard({ user }) {
@@ -9,7 +9,9 @@ function Dashboard({ user }) {
     const [showPopup, setShowPopup] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
+    const [points, setPoints] = useState(0);
     const itemsPerPage = 4;
+    user = localStorage.getItem("username");
 
         // // calculations for the progress bar
         // const calculateProgress = (dateAdded, daysLeft) => {
@@ -55,7 +57,7 @@ function Dashboard({ user }) {
         "olive": "🫒",
         "cucumber": "🥒",
         "potato": "🥔",
-        "sweet_potato": "🍠",
+        "sweet potato": "🍠",
         "corn": "🌽",
         "mushroom": "🍄",
         "garlic": "🧄",
@@ -82,12 +84,24 @@ function Dashboard({ user }) {
         return `${year}-${month}-${day}`;
     };
 
+    useEffect(() => {
+        console.log("Updated points:", points);
+    }, [points]);
+
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/get-all-items');
+            const response = await axios.get('http://localhost:8000/get-all-items', {
+                params: { user }
+              });
             const data = response.data.updatedItems;
             setItems(data);
+            console.log("current user: ", user);
+            const responsePoints = await axios.get(`http://localhost:8000/get-points`, {
+                params: { user }
+              });            
+              setPoints(responsePoints.data.points);
+            console.log("current points: ", points);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -109,7 +123,7 @@ function Dashboard({ user }) {
 
     const handleRemoveOne = async (itemId) => {
         try {
-            await axios.post('http://localhost:8000/subtract-one', { itemId });
+            await axios.post('http://localhost:8000/subtract-one', { itemId, user });
             fetchData(); 
         } catch (error) {
             console.error('Error removing one:', error);
@@ -120,7 +134,7 @@ function Dashboard({ user }) {
         try {
             const response = await axios.post('http://localhost:8000/delete-item', { itemId });
             fetchData(); // Refresh data after removing item
-            alert(response.data.message);
+            // alert(response.data.message);
         } catch (error) {
             console.error('Error removing item:', error);
             alert('Error removing item');
@@ -150,7 +164,7 @@ function Dashboard({ user }) {
         }}>
             <h1 style={{
                 position: 'absolute',
-                top: '-15px',
+                top: '-25px',
                 left: '20px',
                 fontSize: '40px',
                 fontWeight: 'bold',
@@ -160,11 +174,39 @@ function Dashboard({ user }) {
                 width: '100%',
             }}>Hello, <span style={{color: '#427AA1'}}>{user || "Guest"}</span> 👋</h1>
             
+       {/* Streaks Display */}
+        <div style={{
+            position: 'absolute',
+            top: '60px',
+            right: '20px',
+            backgroundColor: 'white',
+            color: '#343A40',
+            padding: '8px 20px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease' /* Smooth transition for any change */
+        }}>
+            <span 
+                role="img" 
+                aria-label="fire" 
+                className="fire-emoji" 
+                style={{ marginRight: '8px' }} /* Add margin to the right of the emoji */
+            >
+                🔥
+            </span> 
+            Streak: {points}
+        </div>
+
             <button 
                 onClick={() => setShowPopup(true)}
                 style={{
                     position: 'absolute',
-                    top: '20px',
+                    top: '15.5px',
                     right: '20px',
                     backgroundColor: '#427AA1',
                     color: 'white',
@@ -176,7 +218,7 @@ function Dashboard({ user }) {
                     fontFamily: 'Karla, sans-serif',
                     fontWeight: 'bold',
                 }}>
-                Add Food Item
+                + Add Food Item
             </button>
 
             {showPopup && (

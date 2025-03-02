@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Winkle";
+  src: url("/Winkle-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -85,11 +92,11 @@
 }
 
 .header-color {
-  color: #343A40;
+  color: #000000;
 }
 
 .add-item-mainlabels {
-  color: #343A40;
+  color: #000000;
 }
 
 
@@ -155,3 +162,41 @@
   visibility: hidden; 
   opacity: 0; 
 }
+
+/* slowing down the popup container*/
+.popup-container {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: scale(0.95);
+}
+
+.popup-container.show {
+  opacity: 95 !important;
+  transform: scale(1);
+}
+
+/* Specific text styling inside the popup-container */
+.popup-container p {
+  color: black; /* Change this color to black */
+}
+
+.popup-container strong {
+  color: black; /* Change this color to black */
+}
+
+/* Bouncing animation */
+@keyframes bounce {
+  0%, 100% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-5px);
+  }
+}
+
+.fruit-bounce {
+  display: inline-block;
+  animation: bounce 1.3s infinite ease-in-out;
+}
+
+
+

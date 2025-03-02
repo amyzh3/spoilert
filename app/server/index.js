@@ -39,6 +39,11 @@ async function getCalories(item, brand){
   return await getGeminiQuery(prompt);
 }
 
+async function getRecipeRecommendation(items){
+    const prompt = "Generate 3 simple dishes and recipes ONLY using these food items: " + items 
+                    + ". Prioritize the food items in descending order in the list. ";
+}
+
 
 app.use(cors());
 app.use(express.json()); 
@@ -66,6 +71,7 @@ const Item = mongoose.model("Item", itemSchema);
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
+  points: Number,
 });
 
 const User = mongoose.model("User", userSchema);
@@ -167,7 +173,7 @@ app.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "Username is already taken." });
     }
 
-    const newUser = new User({ username: signupUsername, password: signupPassword });
+    const newUser = new User({ username: signupUsername, password: signupPassword, points: 0});
 
     await newUser.save();
 
@@ -178,6 +184,51 @@ app.post("/signup", async (req, res) => {
   }
 })
 
+// adding points
+app.post('/add-points', async (req, res) => {
+    try {
+        const {userID} = req.body;
+        if (!mongoose.Types.ObjectId.isValid(userID)) {
+            return res.status(400).json({ error: "Invalid ObjectId format" });
+        }
+        const user = await User.findById(userID);
+        if(!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const updatedUser = await User.findByIdAndUpdate(
+            userID,
+            { $inc: { points: 10 } },
+            { new: true }
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+          }
+        res.status(200).json({ message: "Updated successfully!", points: updatedUser.points });
+    } catch (error) {
+        console.error("Error updating points for user:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+// get points
+app.get('/get-points', async (req, res) => {
+    try {
+        // console.log(req);
+        const username = req.query.user;
+        // console.log('req.query: ', req.query);
+        // console.log('username: ', username);
+        const userObject = await User.findOne({ username: username });
+        if(!userObject) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        
+        res.status(200).json({ points: userObject.points });
+    } catch (error) {
+        console.error("Error updating points for user:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
 // home route
 app.get('/', (req, res) => {
     res.send('Hello Express server is running!');
@@ -186,17 +237,39 @@ app.get('/', (req, res) => {
 // subtract 1 from item
 app.post('/subtract-one', async (req, res) => {
     try {
-        const { itemId } = req.body;
-
+        
+        const { itemId, user } = req.body;
+        console.log('itemId: ', itemId);
+        console.log('user: ', user);
+        if (!mongoose.Types.ObjectId.isValid(itemId)) {
+            return res.status(400).json({ error: "Invalid ObjectId format" });
+        }
         // get item
         const item = await Item.findById(itemId);
         if (!item) {
             return res.status(404).json({ error: "Item not found" });
         }
-        // if item's unit is 1, delete item
+        // if item's unit is 1, delete item, add 10 points
         if (item.units === 1) {
             await Item.findByIdAndDelete(itemId);
-            return res.status(200).json({ message: "Item removed from inventory." });
+            console.log("deleted item");
+            console.log('username: ', user);
+            const userObject = await User.findOne({ username: user });
+            if (!userObject) {
+                console.log("user not found");
+                return res.status(404).json({ error: "User not found" });
+            }
+            console.log(userObject);
+            const updatedUser = await User.findOneAndUpdate(
+                { _id: userObject._id },
+                { $inc: { points: 10 } },
+                { new: true }
+            );
+            if (!updatedUser) {
+                console.log("no updated user");
+                return res.status(404).json({ error: "User not found" });
+            }
+            return res.status(200).json({ message: "Item removed from inventory.", points: updatedUser.points });
         }
         // Otherwise, decrement units of item
         const updatedItem = await Item.findByIdAndUpdate(
@@ -205,7 +278,9 @@ app.post('/subtract-one', async (req, res) => {
         );
         if (!updatedItem) {
             return res.status(404).json({ error: "Item not found" });
-          }
+        }
+
+        
         res.status(200).json({ message: "Updated successfully!", item: updatedItem });
         } catch (error) {
             console.error("Error updating item:", error);
