@@ -46,6 +46,7 @@ function AddItemPage() {
   const handleCancel = () => {
     // reset the form fields
     setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
+    onClose();
   };
 
   return (
