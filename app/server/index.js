@@ -20,14 +20,20 @@ async function getGeminiQuery(prompt){
     return "An error occurred while fetching the answer.";
   }
 }
-async function getExpirationDays(item){
-  const prompt = "Act as a expiration date expert and tell me how many days on minimum a " + item + " is good for consumption from its purchase date in the fridge. Only give me one number. Example: 10";
+async function getExpirationDays(item, brand){
+  const prompt = "Act as a expiration date expert and tell me how many days on minimum a " + brand + item + " is good for consumption from its purchase date in the fridge. Only give me one number. Example: 10";
   
   return await getGeminiQuery(prompt);
 }
 
 async function getDisposalSuggestion(item, brand){
-  const prompt = "Act as a disposal sustainability advisor and tell me in three sentences or less how to dispose a " + item + " of brand " + brand + " after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
+  const prompt = "Act as a disposal sustainability advisor and tell me in three sentences or less how to dispose a " + brand + " " + item + " after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
+
+  return await getGeminiQuery(prompt);
+}
+
+async function getCalories(item, brand){
+  const prompt = "Tell me how many calories a " + brand + item + " is. Only give me one number. Example: 65";
 
   return await getGeminiQuery(prompt);
 }
@@ -70,14 +76,20 @@ app.get('/', (req, res) => {
     res.send('Hello Express server is running!');
   });
 
-app.get('/exp', async (req, res) =>{
+app.get('/exp', async (req, res) => {
   const answer = await getExpirationDays("banana");
 
   res.send(answer);
 })
 
-app.get('/disposal', async (req, res) =>{
+app.get('/disposal', async (req, res) => {
   const answer = await getDisposalSuggestion("greek yogurt", "trader joes");
+
+  res.send(answer);
+})
+
+app.get('/calories', async (req, res) => {
+  const answer = await getCalories("apple", "");
 
   res.send(answer);
 })
