@@ -9,6 +9,8 @@ function Dashboard({ user }) {
     const [showPopup, setShowPopup] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
+    const [points, setPoints] = useState(0);
+    user = localStorage.getItem("username");
     const itemsPerPage = 4;
 
         // // calculations for the progress bar
@@ -55,7 +57,7 @@ function Dashboard({ user }) {
         "olive": "🫒",
         "cucumber": "🥒",
         "potato": "🥔",
-        "sweet_potato": "🍠",
+        "sweet potato": "🍠",
         "corn": "🌽",
         "mushroom": "🍄",
         "garlic": "🧄",
@@ -82,17 +84,29 @@ function Dashboard({ user }) {
         return `${year}-${month}-${day}`;
     };
 
+    useEffect(() => {
+        console.log("Updated points:", points);
+    }, [points]);
+
     const fetchData = async () => {
         setLoading(true);
         try {
             const response = await axios.get('http://localhost:8000/get-all-items');
             const data = response.data.updatedItems;
             setItems(data);
+            console.log("current user: ", user);
+            const responsePoints = await axios.get(`http://localhost:8000/get-points`, {
+                params: { user }
+              });            
+              setPoints(responsePoints.data.points);
+              //console.log("responsePoints: ", responsePoints.data.points);
+            //console.log("current points: ", points);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
         setLoading(false);
     };
+    
 
     const handleAddItem = (newItem) => {
         setItems([...items, newItem]);
@@ -109,7 +123,8 @@ function Dashboard({ user }) {
 
     const handleRemoveOne = async (itemId) => {
         try {
-            await axios.post('http://localhost:8000/subtract-one', { itemId });
+            console.log(user);
+            await axios.post('http://localhost:8000/subtract-one', { itemId, user });
             fetchData(); 
         } catch (error) {
             console.error('Error removing one:', error);
@@ -181,7 +196,10 @@ function Dashboard({ user }) {
 
             {showPopup && (
                 <div className="popup-container">
-                    <AddItem onClose={() => setShowPopup(false)} />
+                    <AddItem onClose={() => {
+                        setShowPopup(false);
+                        
+                    }} />
                 </div>
             )}
 

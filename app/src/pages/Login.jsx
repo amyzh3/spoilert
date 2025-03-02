@@ -22,9 +22,10 @@ function Login({ setUser }) {
         setUser(loginUsername);
         localStorage.setItem("username", loginUsername);
         navigate("/dashboard");
-      } else {
-        alert(response.data.message);
-      }
+      } 
+      // else {
+      //   alert(response.data.message);
+      // }
     } catch (error) {
       console.error("Error logging in:", error);
       alert(error.response?.data?.message || "Login failed.");

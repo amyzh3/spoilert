@@ -17,11 +17,13 @@ function Signup({ setUser }) {
 
       if(response.status === 201){
         alert("signup successful!");
-        setUser(response.data.username);
+        setUser(signupUsername);
+        localStorage.setItem("username", signupUsername);
         navigate("/dashboard");
-      }else{
-        alert("Sign up failed.")
       }
+      // else{
+      //   alert("Sign up failed.")
+      // }
     } catch (error) {
       console.error('Error signing up:', error);
       alert(error.response.data.message);

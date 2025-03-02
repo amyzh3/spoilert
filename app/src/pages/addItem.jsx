@@ -34,8 +34,9 @@ function AddItemPage({ onClose }) {
         body: JSON.stringify(newItemData),
       });
       const data = await response.json();
-      alert(data.message || "Error adding item");
-      alert("Item added successfully!");
+      // alert(data.message || "Error adding item");
+      window.location.reload(); // Refresh the page
+      // alert("Item added successfully!");
     } catch (error) {
       console.error("Error:", error);
     }
