@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import AddItem from './AddItem';
+import AddItem from './addItem';
 import axios from "axios";
 
 function Dashboard({ user }) {
@@ -10,8 +10,8 @@ function Dashboard({ user }) {
     const [hoveredItem, setHoveredItem] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
     const [points, setPoints] = useState(0);
-    user = localStorage.getItem("username");
     const itemsPerPage = 4;
+    user = localStorage.getItem("username");
 
         // // calculations for the progress bar
         // const calculateProgress = (dateAdded, daysLeft) => {
@@ -91,7 +91,9 @@ function Dashboard({ user }) {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/get-all-items');
+            const response = await axios.get('http://localhost:8000/get-all-items', {
+                params: { user }
+              });
             const data = response.data.updatedItems;
             setItems(data);
             console.log("current user: ", user);
@@ -99,14 +101,12 @@ function Dashboard({ user }) {
                 params: { user }
               });            
               setPoints(responsePoints.data.points);
-              //console.log("responsePoints: ", responsePoints.data.points);
-            //console.log("current points: ", points);
+            console.log("current points: ", points);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
         setLoading(false);
     };
-    
 
     const handleAddItem = (newItem) => {
         setItems([...items, newItem]);
@@ -123,7 +123,6 @@ function Dashboard({ user }) {
 
     const handleRemoveOne = async (itemId) => {
         try {
-            console.log(user);
             await axios.post('http://localhost:8000/subtract-one', { itemId, user });
             fetchData(); 
         } catch (error) {
@@ -135,7 +134,7 @@ function Dashboard({ user }) {
         try {
             const response = await axios.post('http://localhost:8000/delete-item', { itemId });
             fetchData(); // Refresh data after removing item
-            alert(response.data.message);
+            // alert(response.data.message);
         } catch (error) {
             console.error('Error removing item:', error);
             alert('Error removing item');
@@ -196,10 +195,7 @@ function Dashboard({ user }) {
 
             {showPopup && (
                 <div className="popup-container">
-                    <AddItem onClose={() => {
-                        setShowPopup(false);
-                        
-                    }} />
+                    <AddItem onClose={() => setShowPopup(false)} />
                 </div>
             )}
 
@@ -264,9 +260,9 @@ function Dashboard({ user }) {
                                     : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
                                 }
                                 <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
-                                <span className="fruit-bounce" style={{ fontSize: "130px" }}>
-                                    {item.expired ? '🕳️' : getItemEmoji(item)}
-                                </span>
+                                <span style={{ fontSize: "130px"}}>
+                                {item.expired ? '🕳️' : getItemEmoji(item)}
+                            </span>
 
                                 {/* Progress Bar Wrapper */}
                                 <div className="progress-bar-container">
@@ -275,8 +271,10 @@ function Dashboard({ user }) {
                                      backgroundColor: progressBarColor,
                                 }}></div>
                                 </div>
+                            
 
-                                <div className={`popup-container ${hoveredItem === item ? 'show' : ''}`} style={{
+                            {hoveredItem === item && (
+                                <div style={{
                                     position: 'absolute',
                                     top: '40%',
                                     left: '-40%',

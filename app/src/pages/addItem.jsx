@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './AddItem.css'
 
-function AddItemPage({ onClose }) {
+function AddItem({ onClose }) {
   const [count, setCount] = useState(0)
   const [message, setMessage] = useState("");
   const [newItemData, setNewItemData] = useState({
@@ -119,4 +119,4 @@ function AddItemPage({ onClose }) {
   )
 }
 
-export default AddItemPage
+export default AddItem

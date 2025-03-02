@@ -144,12 +144,11 @@
 /* slowing down the popup container*/
 .popup-container {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  opacity: 0;
   transform: scale(0.95);
 }
 
 .popup-container.show {
-  opacity: 95;
+  opacity: 95 !important;
   transform: scale(1);
 }
 
