@@ -64,6 +64,7 @@ function Dashboard({ user }) {
         "onion": "🧅",
         "peanuts": "🥜",
         "chestnut": "🌰",
+        "steak": "🥩",
     };
 
     const username = "User";
