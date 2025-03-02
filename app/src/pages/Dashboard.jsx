@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import AddItem from './AddItem';
+import axios from "axios";
 
 function Dashboard() {
     const [items, setItems] = useState([]);
@@ -16,8 +17,10 @@ function Dashboard() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8000/items'); // Assuming backend has an /items route
-            const data = await response.json();
+            const response = await axios.get('http://localhost:8000/get-all-items'); // Assuming backend has an /items route
+            console.log(response.data.updatedItems);
+            const data = response.data.updatedItems;
+            console.log(data[0]);
             setItems(data);
         } catch (error) {
             console.error('Error fetching data:', error);
