@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import '../App.css'
+import './AddItem.css'
 
 function AddItemPage({ onClose }) {
   const [count, setCount] = useState(0)
@@ -54,11 +54,12 @@ function AddItemPage({ onClose }) {
 
       {/* New Form Section */}
       <div className="form-container">
-        <h2 className="header-color">Add Food Item</h2>
+        <h2 style={{marginTop: '0'}} className="header-color">Add Food Item</h2>
         <form onSubmit={handleSubmit}>
           <label className="form-item">
             <div className="add-item-mainlabels">Item Name <span className="required-asterisk">*</span></div>
             <input
+              className='add-item-input'
               type="text"
               name="itemName"
               value={newItemData.itemName}
@@ -69,6 +70,7 @@ function AddItemPage({ onClose }) {
           <label className="form-item">
             <div className="add-item-mainlabels">Quantity <span className="required-asterisk">*</span></div>
             <input
+              className='add-item-input'
               type="number"
               name="units"
               value={newItemData.units}
@@ -79,6 +81,7 @@ function AddItemPage({ onClose }) {
           <label className="form-item">
             <div className="add-item-mainlabels">Date Purchased <span className="required-asterisk">*</span></div>
             <input
+              className='add-item-input'
               type="date"
               name="dateAdded"
               value={newItemData.dateAdded}
@@ -88,7 +91,7 @@ function AddItemPage({ onClose }) {
           </label>
           <label className="form-item">
             <div className="add-item-mainlabels">Food Category <span className="required-asterisk">*</span></div>
-            <select name="category" value={newItemData.category} onChange={handleChange}>
+            <select className="add-item-input" name="category" value={newItemData.category} onChange={handleChange} required>
               <option value="fruits">Fruits</option>
               <option value="vegetables">Vegetables</option>
               <option value="dairy">Dairy</option>
@@ -97,15 +100,16 @@ function AddItemPage({ onClose }) {
             </select>
           </label>
           <label className="form-item">
-            <div className="add-item-mainlabels">Brand:</div>
+            <div className="add-item-mainlabels">Brand (optional):</div>
             <input
+              className='add-item-input'
               type="text"
               name="brand"
               value={newItemData.brand}
               onChange={handleChange}
             />
           </label>
-          <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
+          <button style={{marginTop: '10px'}} type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
           <button type="submit" className="add-item-button">Add Item</button>
         </form>
       </div>
