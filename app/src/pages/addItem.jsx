@@ -54,10 +54,10 @@ function AddItemPage({ onClose }) {
 
       {/* New Form Section */}
       <div className="form-container">
-        <h2>Add Food Item</h2>
+        <h2 className="header-color">Add Food Item</h2>
         <form onSubmit={handleSubmit}>
           <label className="form-item">
-            Item Name:
+            <div className="add-item-mainlabels">Item Name <span className="required-asterisk">*</span></div>
             <input
               type="text"
               name="itemName"
@@ -67,7 +67,7 @@ function AddItemPage({ onClose }) {
             />
           </label>
           <label className="form-item">
-            Number of Units:
+            <div className="add-item-mainlabels">Quantity <span className="required-asterisk">*</span></div>
             <input
               type="number"
               name="units"
@@ -77,7 +77,7 @@ function AddItemPage({ onClose }) {
             />
           </label>
           <label className="form-item">
-            Date Purchased:
+            <div className="add-item-mainlabels">Date Purchased <span className="required-asterisk">*</span></div>
             <input
               type="date"
               name="dateAdded"
@@ -87,7 +87,7 @@ function AddItemPage({ onClose }) {
             />
           </label>
           <label className="form-item">
-            Food Category:
+            <div className="add-item-mainlabels">Food Category <span className="required-asterisk">*</span></div>
             <select name="category" value={newItemData.category} onChange={handleChange}>
               <option value="fruits">Fruits</option>
               <option value="vegetables">Vegetables</option>
@@ -97,7 +97,7 @@ function AddItemPage({ onClose }) {
             </select>
           </label>
           <label className="form-item">
-            Brand (Optional):
+            <div className="add-item-mainlabels">Brand:</div>
             <input
               type="text"
               name="brand"
