@@ -115,10 +115,13 @@ function Dashboard() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    background: '#D3D9DF',
-                    padding: '20px',
-                    borderRadius: '10px',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                    background: 'rgba(211, 217, 223, 0.9)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    padding: '30px',
+                    width: '400px',
+                    borderRadius: '15px',
+                    boxShadow: '0 6px 10px rgba(0, 0, 0, 0.15)'
                 }}>
                     <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />
                 </div>
