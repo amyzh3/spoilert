@@ -9,7 +9,7 @@ function AddItemPage({ onClose }) {
     units: "",
     dateAdded: "",
     category: "fruits", 
-    daysLeft: "",
+    expirationDate: "",
     brand: "",
   });
 
@@ -40,12 +40,12 @@ function AddItemPage({ onClose }) {
       console.error("Error:", error);
     }
     
-    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
+    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", expirationDate: "", brand: "" });
   };
 
   const handleCancel = () => {
     // reset the form fields
-    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
+    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", expirationDate: "", brand: "" });
     onClose();
   };
 

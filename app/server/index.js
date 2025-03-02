@@ -55,7 +55,6 @@ const itemSchema = new mongoose.Schema({
     units: Number,
     dateAdded: String,
     category: String,
-    daysLeft: Number, // calculated using GeminiAI
     brand: String, 
     disposalSuggestion: String, 
     expirationDate: String,
@@ -76,17 +75,15 @@ app.post("/add-item", async (req, res) => {
     try {
         // store item properties
         const newItem = new Item(req.body);
-        console.log(newItem);
         // const { itemName, units, dateAdded, category, brand } = req.body.body;
-        console.log("itemName", newItem.itemName);
         //console.log("dateAdded", dateAdded);
-        newItem.daysLeft = parseInt(await getExpirationDays(newItem.itemName, newItem.brand)) || 0;
+        let daysLeft = parseInt(await getExpirationDays(newItem.itemName, newItem.brand)) || 0;
         
         const parsedDate = new Date(newItem.dateAdded);
         if (isNaN(parsedDate)) {
             throw new Error(`Invalid dateAdded value: ${dateAdded}`);
         }
-        parsedDate.setDate(parsedDate.getDate() + parseInt(newItem.daysLeft));
+        parsedDate.setDate(parsedDate.getDate() + parseInt(daysLeft));
         newItem.expirationDate = parsedDate.toISOString();
         newItem.calories = parseInt(await getCalories((newItem.itemName || ""), (newItem.brand || "")));
         newItem.disposalSuggestion = await getDisposalSuggestion(newItem.itemName || ""), (newItem.brand || "");
@@ -103,43 +100,41 @@ app.post("/add-item", async (req, res) => {
 app.get("/get-all-items", async (req, res) => {
   try {
     const items = await Item.find({});
-    // sort items by expiration
-    const sortedItems = items.sort((a, b) => {
-        const currentDate = new Date();
-        
-        // convert dateAdded to Date object
-        const aDateAdded = new Date(a.dateAdded);
-        const bDateAdded = new Date(b.dateAdded);
-      
-        // compute remaining days
-        const aRemaining = a.daysLeft - Math.floor((currentDate - aDateAdded) / (1000 * 60 * 60 * 24));
-        const bRemaining = b.daysLeft - Math.floor((currentDate - bDateAdded) / (1000 * 60 * 60 * 24));
-      
-        return aRemaining - bRemaining; // sort least to greatest
-    });
-
     const currentDate = new Date();
 
-      // calculate progress bar percentage
-    const updatedItems = sortedItems.map(item => {
+    // calculate currDaysLeft for each item
+    const updatedItems = items.map(item => {
         const expirationDate = new Date(item.expirationDate);
+        item.expirationDate = expirationDate.toISOString();
+        const dateAdded = new Date(item.dateAdded);
         
         // calculate remaining time in milliseconds
         const timeLeft = expirationDate - currentDate;
         
         // convert to days
-        const currDaysLeft = timeLeft / (1000 * 60 * 60 * 24);
+        let currDaysLeft = timeLeft / (1000 * 60 * 60 * 24);
+
+        const totalLifespan = (expirationDate - dateAdded) / (1000 * 60 * 60 * 24);
+
         
-        // calculate percentage
-        const percentage = currDaysLeft / item.daysLeft * 100;
-        // expired = true if it's after the expiration date
+        // Calculate percentage
+        const percentage = (currDaysLeft / totalLifespan) * 100;
+
+        
+        // Check if item is expired
         const expired = currentDate > expirationDate;
-        return { ...item, percentage, expired }; // Add percentage to item
+
+
+        return { ...item, daysLeft: Math.round(currDaysLeft), percentage, expired };
     });
-    console.log(updatedItems);
-    res.status(200).json({updatedItems})
-  }catch (error) {
-    res.status(500).json({ error: "Failed to get all items"})
+
+
+    // sort items by currDaysLeft (least to greatest)
+    const sortedItems = updatedItems.sort((a, b) => a.daysLeft - b.daysLeft);
+
+    res.status(200).json({ updatedItems: sortedItems });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get all items" });
   }
 })
 

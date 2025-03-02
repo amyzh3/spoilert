@@ -61,6 +61,14 @@ function Dashboard({ user }) {
         return itemNameToEmoji[item._doc.itemName.toLowerCase()] || "❓";
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -177,8 +185,10 @@ function Dashboard({ user }) {
                                  : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
                             }
                             {/* {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>} */}
-                            <span style={{ fontSize: "30px", color: "black", marginBottom: "5px" }}>{item._doc.itemName}</span>
-                            <span style={{ fontSize: "130px" }}>{getItemEmoji(item)}</span>
+                            <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
+                            <span style={{ fontSize: "130px"}}>
+                                {item.expired ? '🕳️' : getItemEmoji(item)}
+                            </span>
 
                             {/* Progress Bar Wrapper */}
                             <div className="progress-bar-container">
@@ -199,7 +209,8 @@ function Dashboard({ user }) {
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                                     zIndex: 100
                                 }}>
-                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item._doc.daysLeft || 'Unknown'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item.daysLeft || 'Unknown'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Expiration Date:</strong> {item._doc.expirationDate ? formatDate(item._doc.expirationDate) : 'Unknown'}</p> {/* Updated to format expiration date */}
                                     <p style={{ color: '#343A40' }}><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion || 'N/A'}</p>
                                     <p style={{ color: '#343A40' }}><strong>Calories:</strong> {item._doc.calories || 'N/A'}</p>
                                 </div>
