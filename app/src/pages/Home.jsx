@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 function Home() {
   const navigate = useNavigate();
-  const [slideOut, setSlideOut] = useState(false); // State to trigger animation
+  const [slideOut, setSlideOut] = useState(false); // state 
 
   const handleClick = () => {
-    setSlideOut(true); // Start animation
+    setSlideOut(true); // start animation
     setTimeout(() => {
-      navigate("/login"); // Navigate after animation completes
-    }, 600); // Match animation duration
+      navigate("/login"); // Navigate after motion
+    }, 600); 
   };
 
   return (
