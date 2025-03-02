@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard"
 import Home from "./pages/Home"
 import { useState } from "react";
 import Signup from './pages/Signup'
+import Recipe from './pages/Recipe'
 
 import "@fontsource/karla/400.css";  
 import "@fontsource/karla/500.css";  
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
         <Route path="/dashboard" element={<Dashboard user={user} />} />
+        <Route path="/recipe" element={<Recipe />} />
       </Routes>
     </BrowserRouter>
   );

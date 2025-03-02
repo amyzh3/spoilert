@@ -17,7 +17,6 @@ function Recipe() {
       setLoading(false);
 
       if (response.status === 200) {
-        alert("Recipe fetched successfully!");
         const recipeString = response.data.recipe;
         const result = recipeString.substring(7, recipeString.length - 4);
         setRecipe(result);
@@ -33,11 +32,11 @@ function Recipe() {
   return (
     <div style={{display: 'flex', flexDirection:'column', alignItems:'center', backgroundColor: 'white', minHeight: '80vh', padding: '30px'}}>
       <h1 style={{fontSize: '50px', color: '#427AA1', marginTop: '0px'}}>A Recipe for your Fridge...</h1>
-      {loading && <p>Loading...</p>}
+      {loading && <p style={{color: '#427AA1', fontWeight: '700'}}>Loading...</p>}
       
       {/* Conditionally render recipe */}
       {!loading && recipe && (
-        <div id='recipeContainer' style={{color: '#343A40'}} dangerouslySetInnerHTML={{ __html: recipe }} />
+        <div id='recipeContainer' style={{color: '#343A40', textAlign: 'left'}} dangerouslySetInnerHTML={{ __html: recipe }} />
       )}
 
       {/* If no recipe is loaded */}

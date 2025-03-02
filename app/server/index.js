@@ -14,7 +14,6 @@ const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 async function getGeminiQuery(prompt){
   try {
     const result = await model.generateContent(prompt);
-    console.log("Response:", result.response.text());
     return result.response.text();
   } catch (error) {
     console.error("Error generating content:", error);
@@ -28,7 +27,7 @@ async function getExpirationDays(item, brand){
 }
 
 async function getDisposalSuggestion(item, brand){
-  const prompt = "Act as a disposal sustainability advisor and tell me in three sentences or less how to dispose a " + brand + " " + item + " after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
+  const prompt = "Act as a disposal sustainability advisor and tell me in three sentences or less how to dispose the food, " + brand + " " + item + ", after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
 
   return await getGeminiQuery(prompt);
 }
@@ -39,10 +38,15 @@ async function getCalories(item, brand){
   return await getGeminiQuery(prompt);
 }
 
-async function getRecipeRecommendation(items){
-    const prompt = "Generate 3 simple dishes and recipes ONLY using these food items: " + items 
-                    + ". Prioritize the food items in descending order in the list. ";
+async function generateRecipes(items) {
+  const prompt = "Act as a recipe generator and tell me how to use the following food items in one recipe: " 
+  + items.map(item => `${item.units} ${item.brand} ${item.itemName}`).join(", ") 
+  + ". Provide a short recipe that summarizes the ingredients and steps. Make it easy to understand and follow. Give me in html format so I can embed directly into my React code. Do not include any additional information or disclaimers. Do not preceed/proceed with quotation marks.";
+
+  
+  return await getGeminiQuery(prompt);
 }
+
 
 
 app.use(cors());
@@ -102,6 +106,30 @@ app.post("/add-item", async (req, res) => {
       }
   });
 
+  app.get("/get-recipe", async (req, res) => {
+    try {
+      const response = await axios.get("http://localhost:8000/get-all-items");
+      const itemsAllProperties = response.data.updatedItems;
+
+      const items = itemsAllProperties.map(item => ({
+        itemName: item._doc.itemName,
+        units: item._doc.units,
+        brand: item._doc.brand
+      }));
+
+      if (!items || items.length === 0) {
+        return res.status(404).json({ message: "No items available for recipes" });
+      }
+
+      const recipes = await generateRecipes(items);
+      console.log(recipes)
+      res.status(200).json({ recipe: recipes });
+
+    } catch (error) {
+      console.error("Error getting recipe:", error);
+      res.status(500).json({ error: "Failed to get recipe" });
+    }
+  });
   // get all items
 app.get("/get-all-items", async (req, res) => {
   try {

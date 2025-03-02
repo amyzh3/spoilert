@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import AddItem from './addItem';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard({ user }) {
     const [items, setItems] = useState([]);
@@ -12,6 +13,8 @@ function Dashboard({ user }) {
     const [points, setPoints] = useState(0);
     const itemsPerPage = 4;
     user = localStorage.getItem("username");
+
+    const navigate = useNavigate();
 
         // // calculations for the progress bar
         // const calculateProgress = (dateAdded, daysLeft) => {
@@ -202,6 +205,25 @@ function Dashboard({ user }) {
             </span> 
             Streak: {points}
         </div>
+
+        <button 
+                onClick={() => navigate("/recipe")}
+                style={{
+                    position: 'absolute',
+                    top: '106px',
+                    right: '20px',
+                    backgroundColor: '#427AA1',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    fontFamily: 'Karla, sans-serif',
+                    fontWeight: 'bold',
+                }}>
+                Create recipes!
+            </button>
 
             <button 
                 onClick={() => setShowPopup(true)}
