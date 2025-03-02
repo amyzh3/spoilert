@@ -64,7 +64,7 @@ function Dashboard() {
                     position: 'absolute',
                     top: '20px',
                     right: '20px',
-                    backgroundColor: 'blue',
+                    backgroundColor: '#427AA1',
                     color: 'white',
                     border: 'none',
                     padding: '10px 20px',
