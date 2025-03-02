@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Winkle";
-  src: url("/fonts/Winkle-Regular.otf") format("opentype");
+  src: url("/Winkle-Regular.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -92,11 +92,11 @@
 }
 
 .header-color {
-  color: #343A40;
+  color: #000000;
 }
 
 .add-item-mainlabels {
-  color: #343A40;
+  color: #000000;
 }
 
 
@@ -149,6 +149,15 @@
 }
 
 .popup-container.show {
-  opacity: 1;
+  opacity: 0.8;
   transform: scale(1);
+}
+
+/* Specific text styling inside the popup-container */
+.popup-container p {
+  color: black; /* Change this color to black */
+}
+
+.popup-container strong {
+  color: black; /* Change this color to black */
 }
