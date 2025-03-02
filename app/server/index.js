@@ -118,11 +118,15 @@ app.get("/get-all-items", async (req, res) => {
 
         
         // Calculate percentage
-        const percentage = (currDaysLeft / totalLifespan) * 100;
-
-        
+        let percentage = Math.round((currDaysLeft / totalLifespan) * 100);
+      
+        if(percentage < 0 || Math.round(currDaysLeft) <= 0){
+            percentage = 0;
+        }else if(percentage > 100 || dateAdded >= currentDate){
+            percentage = 100;
+        }
         // Check if item is expired
-        const expired = currentDate > expirationDate;
+        const expired = Math.round(currDaysLeft) <= 0;
 
 
         return { ...item, daysLeft: Math.round(currDaysLeft), percentage, expired };
@@ -182,8 +186,8 @@ app.get('/', (req, res) => {
 // subtract 1 from item
 app.post('/subtract-one', async (req, res) => {
     try {
-        const { itemID } = req.body;
-        if (!mongoose.Types.ObjectId.isValid(itemID)) {
+        const { itemId } = req.body;
+        if (!mongoose.Types.ObjectId.isValid(itemId)) {
             return res.status(400).json({ error: "Invalid ObjectId format" });
         }
         // get item
@@ -200,7 +204,6 @@ app.post('/subtract-one', async (req, res) => {
         const updatedItem = await Item.findByIdAndUpdate(
             itemID,
             { $inc: { units: -1 } },
-            { new: true }
         );
         if (!updatedItem) {
             return res.status(404).json({ error: "Item not found" });
@@ -215,14 +218,12 @@ app.post('/subtract-one', async (req, res) => {
 // add 1 to item
 app.post('/add-one', async (req, res) => {
     try {
-        const { itemID } = req.body;
-        if (!mongoose.Types.ObjectId.isValid(itemID)) {
-            return res.status(400).json({ error: "Invalid ObjectId format" });
-        }
+        const { itemId } = req.body;
+
+
         const updatedItem = await Item.findByIdAndUpdate(
-            itemID,
+            itemId,
             { $inc: { units: 1 } },
-            { new: true }
         );
         if (!updatedItem) {
             return res.status(404).json({ error: "Item not found" });
@@ -233,6 +234,22 @@ app.post('/add-one', async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
     
+});
+
+// delete item
+app.post('/delete-item', async (req, res) => {
+    try {
+        const { itemId } = req.body;
+
+        const deletedItem = await Item.findByIdAndDelete(itemId);
+        if (!deletedItem) {
+            return res.status(404).json({ error: "Item not found" });
+          }
+        res.status(200).json({ message: "Item deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting item:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 app.get('/exp', async (req, res) => {

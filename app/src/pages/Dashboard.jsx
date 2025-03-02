@@ -11,18 +11,18 @@ function Dashboard({ user }) {
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 4;
 
-    // calculations for the progress bar
-    const calculateProgress = (dateAdded, daysLeft) => {
-        const currentDate = new Date();
-        const addedDate = new Date(dateAdded);
-        const expirationDate = new Date(addedDate);
-        expirationDate.setDate(expirationDate.getDate() + daysLeft);
-
-        const totalDays = (expirationDate - addedDate) / (1000 * 60 * 60 * 24);
-        const remainingDays = (expirationDate - currentDate) / (1000 * 60 * 60 * 24);
-
-        return Math.max(0, Math.min(100, (remainingDays / totalDays) * 100));
-    };
+        // // calculations for the progress bar
+        // const calculateProgress = (dateAdded, daysLeft) => {
+        //     const currentDate = new Date();
+        //     const addedDate = new Date(dateAdded);
+        //     const expirationDate = new Date(addedDate);
+        //     expirationDate.setDate(expirationDate.getDate() + daysLeft);
+    
+        //     const totalDays = (expirationDate - addedDate) / (1000 * 60 * 60 * 24);
+        //     const remainingDays = (expirationDate - currentDate) / (1000 * 60 * 60 * 24);
+    
+        //     return Math.max(0, Math.min(100, (remainingDays / totalDays) * 100));
+        // };
 
     const itemNameToEmoji = {
         "strawberry": "🍓",
@@ -96,6 +96,35 @@ function Dashboard({ user }) {
 
     const handleAddItem = (newItem) => {
         setItems([...items, newItem]);
+    };
+
+    const handleAddone = async (itemId) => {
+        try {
+            await axios.post('http://localhost:8000/add-one', { itemId });
+            fetchData();
+        } catch (error) {
+            console.error('Error adding one:', error);
+        }
+    }
+
+    const handleRemoveOne = async (itemId) => {
+        try {
+            await axios.post('http://localhost:8000/remove-one', { itemId });
+            fetchData(); 
+        } catch (error) {
+            console.error('Error removing one:', error);
+        }
+    }
+
+    const handleRemove = async (itemId) => {
+        try {
+            const response = await axios.post('http://localhost:8000/delete-item', { itemId });
+            fetchData(); // Refresh data after removing item
+            alert(response.data.message);
+        } catch (error) {
+            console.error('Error removing item:', error);
+            alert('Error removing item');
+        }
     };
 
     const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -177,15 +206,16 @@ function Dashboard({ user }) {
                     flex: 1,
                 }}>
                     {displayedItems.map((item, index) => {
-                        const progress = calculateProgress(item._doc.dateAdded, item._doc.daysLeft);
-                        let progressBarColor = 'green';
+                        const progress = item.percentage;
+
+                        let progressBarColor = '#49A93C';
 
                         if (progress <= 50) {
-                            progressBarColor = 'yellow';
+                            progressBarColor = '#E3CD28';
                         }
                         
                         if (progress <= 25) {
-                            progressBarColor = 'red';
+                            progressBarColor = '#ED5353';
                         }
 
                         return (
@@ -209,7 +239,6 @@ function Dashboard({ user }) {
                                     item._doc.brand && item._doc.brand.length > 0 ? <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>
                                     : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
                                 }
-                                {/* {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>} */}
                                 <span style={{ fontSize: "30px", color: "black", marginBottom: "5px", fontWeight: "500" }}>{item._doc.itemName}</span>
                                 <span style={{ fontSize: "130px"}}>
                                 {item.expired ? '🕳️' : getItemEmoji(item)}
@@ -217,34 +246,74 @@ function Dashboard({ user }) {
 
                                 {/* Progress Bar Wrapper */}
                                 <div className="progress-bar-container">
-                                    <div className="progress-bar" style={{ width: `${calculateProgress(item._doc.dateAdded, item._doc.daysLeft)}%` }}></div>
+                                <div className="progress-bar" style={{
+                                     width: `${progress}%`, 
+                                     backgroundColor: progressBarColor,
+                                }}></div>
                                 </div>
                             
 
                             {hoveredItem === item && (
                                 <div style={{
                                     position: 'absolute',
-                                    top: '100%',
-                                    left: '-100%',
+                                    top: '40%',
+                                    left: '-40%',
+                                    width: '20vw',
                                     transform: 'translateY(-50%)',
-                                    background: 'rgba(203, 211, 219, 0.8)',
+                                    background: 'rgba(203, 211, 219, 0.95)',
                                     color: 'black',
                                     padding: '10px',
                                     borderRadius: '5px',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                                     zIndex: 100
                                 }}>
-                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item._doc.daysLeft || 'Unknown'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong>   {item.daysLeft > 0 ? item.daysLeft + ' day(s)' : Math.abs(item.daysLeft) + ' day(s) ago'}
+                                    </p>
+                                    <p style={{ color: '#343A40' }}><strong>Expiration Date:</strong> {item._doc.expirationDate ? formatDate(item._doc.expirationDate) : 'Unknown'}</p> {/* Updated to format expiration date */}
                                     <p style={{ color: '#343A40' }}><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion || 'N/A'}</p>
                                     <p style={{ color: '#343A40' }}><strong>Calories:</strong> {item._doc.calories || 'N/A'}</p>
+                                    <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginTop: '10px', backgroundColor: 'white', padding: '5px 8px', borderRadius: '5px', width: '' }}>
+                                    <button 
+                                            onClick={async () => handleRemoveOne(item._doc._id)}
+                                            style={{
+                                                backgroundColor: '#427AA1',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '5px 10px',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                                fontSize: '16px',
+                                                marginLeft: '10px'
+                                            }}
+                                        >
+                                            -
+                                        </button>
+                                        <span style={{ fontSize: '24px', color: '#343A40', fontWeight: '600', margin: '0px 5px' }}>{item._doc.units}</span>
+                                        <button 
+                                            onClick={() => handleAddone(item._doc._id)}
+                                            style={{
+                                                backgroundColor: '#427AA1',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '5px 10px',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                                fontSize: '16px',
+                                                marginRight: '10px'
+                                            }}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <button onClick={() => handleRemove(item._doc._id)} className="remove-item-button" style={{display: 'block', margin: "10px auto"}}>Remove</button>
                                 </div>
                             )}
                         </div>
 
-                    ))}
+                    )})};
                 </div>
 
-                {/* Right Button */}
+
                 <button 
                     onClick={() => setCurrentPage(prev => prev < totalPages - 1 ? prev + 1 : prev)}
                     disabled={currentPage >= totalPages - 1}

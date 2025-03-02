@@ -90,21 +90,6 @@ function Signup({ setUser }) {
             gap: '10px', 
         }}>
           <button 
-            type="submit"
-            style={{
-                background: "#FFFFFF",
-                border: "2px solid #F5F5F5", 
-                fontSize: "24px",
-                cursor: "pointer",
-                color: '#343A40',
-                opacity: '1',
-                padding: '10px 20px',
-                borderRadius: '25px',
-                fontFamily: 'Karla, sans-serif',
-                whiteSpace: 'nowrap',
-            }}> Sign up!
-          </button>
-          <button 
             onClick={() => navigate("/login")}
             style={{
               background: "#FFFFFF",
@@ -118,6 +103,21 @@ function Signup({ setUser }) {
               fontFamily: 'Karla, sans-serif',
               whiteSpace: 'nowrap',
             }}> Go to Login</button>
+            <button 
+              type="submit"
+              style={{
+                  background: "#FFFFFF",
+                  border: "2px solid #F5F5F5", 
+                  fontSize: "24px",
+                  cursor: "pointer",
+                  color: '#343A40',
+                  opacity: '1',
+                  padding: '10px 20px',
+                  borderRadius: '25px',
+                  fontFamily: 'Karla, sans-serif',
+                  whiteSpace: 'nowrap',
+              }}> Sign up!
+          </button>
         </div>
       </form>
     </div>

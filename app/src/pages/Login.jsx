@@ -121,23 +121,6 @@ function Login({ setUser }) {
             }}
           >
             <button
-              type="submit"
-              style={{
-                background: "#FFFFFF",
-                border: "2px solid #F5F5F5",
-                fontSize: "24px",
-                cursor: "pointer",
-                color: "#343A40",
-                opacity: "1",
-                padding: "10px 20px",
-                borderRadius: "25px",
-                fontFamily: "Karla, sans-serif",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Login
-            </button>
-            <button
               onClick={() => navigate("/signup")}
               style={{
                 background: "#FFFFFF",
@@ -153,6 +136,23 @@ function Login({ setUser }) {
               }}
             >
               Go to Signup
+            </button>
+            <button
+              type="submit"
+              style={{
+                background: "#FFFFFF",
+                border: "2px solid #F5F5F5",
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "#343A40",
+                opacity: "1",
+                padding: "10px 20px",
+                borderRadius: "25px",
+                fontFamily: "Karla, sans-serif",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Login
             </button>
           </div>
         </form>

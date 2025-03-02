@@ -118,3 +118,18 @@
 .fridge-button:hover {
   transform: rotate(-10deg) scale(1.1) translate(-50%, -50%);
 }
+
+.remove-item-button {
+  background-color: #ED5353;
+  color: white;
+  padding: 7px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-family: 'Karla', sans-serif;
+  border-radius: 10px;
+  font-weight: 600;
+}
