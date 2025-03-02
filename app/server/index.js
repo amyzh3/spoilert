@@ -63,6 +63,13 @@ const itemSchema = new mongoose.Schema({
 
 const Item = mongoose.model("Item", itemSchema);
 
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+});
+
+const User = mongoose.model("User", userSchema);
+
 // add new food item
 app.post("/add-item", async (req, res) => {
     try {
@@ -89,6 +96,28 @@ app.get("/get-all-items", async (req, res) => {
   }catch (error) {
     res.status(500).json({ error: "Failed to get all items"})
   }
+})
+
+app.post("/login", (req, res) => {
+  const {username, password} = req.body;
+  User.findOne({username : username})
+  .then(user => {
+      if(user) {
+          if(user.password === password){
+              res.json("Success")
+          }else{
+              res.json("The password is incorrect")
+          }
+      }else{
+          res.json("No record existed")
+      }
+  })
+})
+
+app.post("/register", (req, res) => {
+  User.create(req.body)
+  .then(users => res.json(users))
+  .catch(err => res.json(err))
 })
 
 // home route
