@@ -180,18 +180,18 @@ function Dashboard({ user }) {
                                 <div style={{
                                     position: 'absolute',
                                     top: '100%',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    background: 'white',
+                                    left: '-100%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'rgba(203, 211, 219, 0.8)',
                                     color: 'black',
                                     padding: '10px',
                                     borderRadius: '5px',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                                     zIndex: 100
                                 }}>
-                                    <p><strong>Expiration Days:</strong> {item._doc.daysLeft || 'Unknown'}</p>
-                                    <p><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion || 'N/A'}</p>
-                                    <p><strong>Calories:</strong> {item._doc.calories || 'N/A'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Time Until Expired:</strong> {item._doc.daysLeft || 'Unknown'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Disposal Suggestion:</strong> {item._doc.disposalSuggestion || 'N/A'}</p>
+                                    <p style={{ color: '#343A40' }}><strong>Calories:</strong> {item._doc.calories || 'N/A'}</p>
                                 </div>
                             )}
                         </div>
