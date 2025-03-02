@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -35,10 +36,39 @@ async function getDisposalSuggestion(item, brand){
 app.use(cors());
 app.use(express.json()); // For JSON parsing
 
-// Test route
+// Connect MongoDB
+mongoose.connect(process.env.MONGO_URI, {})
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+const db = mongoose.connection;
+
+const itemSchema = new mongoose.Schema({
+    itemName: String,
+    units: Number,
+    dateAdded: String,
+    category: String,
+    daysLeft: Number, // calculated using GeminiAI
+    brand: String, // Optional
+  });
+
+const Item = mongoose.model("Item", itemSchema);
+
+// add new food item
+app.post("/add-item", async (req, res) => {
+    try {
+      const newItem = new Item(req.body);
+      await newItem.save();
+      res.status(201).json({ message: "Item added successfully!" });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to save item" });
+    }
+  });
+
+// home route
 app.get('/', (req, res) => {
-  res.send('Hello Express server is running!');
-});
+    res.send('Hello Express server is running!');
+  });
 
 app.get('/exp', async (req, res) =>{
   const answer = await getExpirationDays("banana");
