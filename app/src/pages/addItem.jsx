@@ -50,7 +50,7 @@ function AddItemPage() {
       <div className="form-container">
         <h2>Add Food Item</h2>
         <form onSubmit={handleSubmit}>
-          <label>
+          <label className="form-item">
             Item Name:
             <input
               type="text"
@@ -60,7 +60,7 @@ function AddItemPage() {
               required
             />
           </label>
-          <label>
+          <label className="form-item">
             Number of Units:
             <input
               type="number"
@@ -70,7 +70,7 @@ function AddItemPage() {
               required
             />
           </label>
-          <label>
+          <label className="form-item">
             Date Purchased:
             <input
               type="date"
@@ -80,7 +80,7 @@ function AddItemPage() {
               required
             />
           </label>
-          <label>
+          <label className="form-item">
             Food Category:
             <select name="category" value={newItemData.category} onChange={handleChange}>
               <option value="fruits">Fruits</option>
@@ -90,7 +90,7 @@ function AddItemPage() {
               <option value="grains">Grains</option>
             </select>
           </label>
-          <label>
+          <label className="form-item">
             Brand (Optional):
             <input
               type="text"
@@ -99,7 +99,7 @@ function AddItemPage() {
               onChange={handleChange}
             />
           </label>
-          <button type="submit">Add Item</button>
+          <button type="submit" className="add-item-button">Add Item</button>
         </form>
       </div>
     </>

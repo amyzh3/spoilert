@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.add-item-button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-item-button:hover {
+  background-color: darkgreen;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
