@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -58,7 +59,7 @@ const itemSchema = new mongoose.Schema({
     brand: String, // Optional
     disposalSuggestion: String, // filled the first time it is asked to be displayed
     expirationDate: String,
-
+    calories: Number,
   });
 
 const Item = mongoose.model("Item", itemSchema);
@@ -73,17 +74,28 @@ const User = mongoose.model("User", userSchema);
 // add new food item
 app.post("/add-item", async (req, res) => {
     try {
-      const newItem = new Item(req.body);
-      const dateAdded = new Date(newItem.dateAdded);
-      newItem.daysLeft = await getExpirationDays(newItem.itemName);
-      const expirationDate = new Date(dateAdded);
-      expirationDate.setDate(expirationDate.getDate() + newItem.daysLeft);
-      newItem.expirationDate = expirationDate.toISOString();
-      await newItem.save();
-      res.status(201).json({ message: "Item added successfully!" });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to save item" });
-    }
+        // store item properties
+        const newItem = new Item(req.body);
+        console.log(newItem);
+        // const { itemName, units, dateAdded, category, brand } = req.body.body;
+        console.log("itemName", newItem.itemName);
+        //console.log("dateAdded", dateAdded);
+        newItem.daysLeft = parseInt(await getExpirationDays(newItem.itemName, newItem.brand)) || 0;
+        
+        const parsedDate = new Date(newItem.dateAdded);
+        if (isNaN(parsedDate)) {
+            throw new Error(`Invalid dateAdded value: ${dateAdded}`);
+        }
+        parsedDate.setDate(parsedDate.getDate() + parseInt(newItem.daysLeft));
+        newItem.expirationDate = parsedDate.toISOString();
+        newItem.calories = parseInt(await getCalories((newItem.itemName || ""), (newItem.brand || "")));
+    
+        await newItem.save();
+        res.status(201).json({ message: "Item added successfully!" });
+      } catch (error) {
+        console.error("Error adding item:", error);
+        res.status(500).json({ error: "Failed to save item" });
+      }
   });
 
   // get all items
@@ -124,6 +136,62 @@ app.post("/register", (req, res) => {
 app.get('/', (req, res) => {
     res.send('Hello Express server is running!');
   });
+
+// subtract 1 from item
+app.post('/subtract-one', async (req, res) => {
+    try {
+        const { itemID } = req.body;
+        if (!mongoose.Types.ObjectId.isValid(itemID)) {
+            return res.status(400).json({ error: "Invalid ObjectId format" });
+        }
+        // get item
+        const item = await Item.findById(itemID);
+        if (!item) {
+            return res.status(404).json({ error: "Item not found" });
+        }
+        // if item's unit is 1, delete item
+        if (item.units === 1) {
+            await Item.findByIdAndDelete(itemID);
+            return res.status(200).json({ message: "Item removed from inventory." });
+        }
+        // Otherwise, decrement units of item
+        const updatedItem = await Item.findByIdAndUpdate(
+            itemID,
+            { $inc: { units: -1 } },
+            { new: true }
+        );
+        if (!updatedItem) {
+            return res.status(404).json({ error: "Item not found" });
+          }
+        res.status(200).json({ message: "Updated successfully!", item: updatedItem });
+        } catch (error) {
+            console.error("Error updating item:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+});
+
+// add 1 to item
+app.post('/add-one', async (req, res) => {
+    try {
+        const { itemID } = req.body;
+        if (!mongoose.Types.ObjectId.isValid(itemID)) {
+            return res.status(400).json({ error: "Invalid ObjectId format" });
+        }
+        const updatedItem = await Item.findByIdAndUpdate(
+            itemID,
+            { $inc: { units: 1 } },
+            { new: true }
+        );
+        if (!updatedItem) {
+            return res.status(404).json({ error: "Item not found" });
+          }
+        res.status(200).json({ message: "Updated successfully!", item: updatedItem });
+    } catch (error) {
+        console.error("Error updating item:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+    
+});
 
 app.get('/exp', async (req, res) => {
   const answer = await getExpirationDays("banana");

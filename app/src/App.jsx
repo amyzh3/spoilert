@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import axios from "axios";
 import './App.css'
 
 function App() {
@@ -17,8 +18,8 @@ function App() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:8000")
-      .then((res) => res.text())
+    axios.get("http://localhost:8000")
+      .then((res) => res.data)
       .then((data) => setMessage(data))
       .catch((err) => console.error(err));
   }, []);
@@ -31,12 +32,10 @@ function App() {
     e.preventDefault();
     console.log("Submitted Data:", newItemData);
     try {
-      const response = await fetch("http://localhost:8000/add-item", {
-        method: "POST",
+      const response = await axios.post("http://localhost:8000/add-item", newItemData, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newItemData),
       });
-      const data = await response.json();
+      const data = await response.data;
       alert(data.message || "Error adding item");
       alert("Item added successfully!");
     } catch (error) {
