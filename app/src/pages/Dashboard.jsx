@@ -172,9 +172,19 @@ function Dashboard({ user }) {
                             onMouseEnter={() => setHoveredItem(item)}
                             onMouseLeave={() => setHoveredItem(null)}
                         >
-                            {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>}
+                            {
+                                item._doc.brand && item._doc.brand.length > 0 ? <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>
+                                 : <span style={{ fontSize: '20px', opacity: '0' }}>placeholder</span>
+                            }
+                            {/* {item._doc.brand && <span style={{ fontSize: '20px', color: 'gray' }}>{item._doc.brand}</span>} */}
                             <span style={{ fontSize: "30px", color: "black", marginBottom: "5px" }}>{item._doc.itemName}</span>
                             <span style={{ fontSize: "130px" }}>{getItemEmoji(item)}</span>
+
+                            {/* Progress Bar Wrapper */}
+                            <div className="progress-bar-container">
+                                <div className="progress-bar" style={{ width: `${item._doc.progress}%` }}></div>
+                            </div>
+                           
 
                             {hoveredItem === item && (
                                 <div style={{
