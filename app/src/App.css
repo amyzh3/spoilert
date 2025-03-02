@@ -56,3 +56,65 @@
   border-radius: 5px;
 }
 
+.add-item-button:hover {
+  background-color: #54c745;
+}
+
+.cancel-button {
+  background-color: gray;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.cancel-button:hover {
+  background-color: darkgray;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}
+
+.required-asterisk {
+  color: red;
+}
+
+.header-color {
+  color: #343A40;
+}
+
+.add-item-mainlabels {
+  color: #343A40;
+}
+
+
+.fridge-button {
+  background: transparent;
+  border: none;
+  color: #343A40;
+  cursor: pointer;
+  font-size: 40px;
+  font-family: "Winkle", sans-serif;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding: 10px 20px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  transform: rotate(-10deg) translate(-50%, -50%);
+  transition: transform 0.1s ease-in-out;
+}
+
+.fridge-button:hover {
+  transform: rotate(-10deg) scale(1.1) translate(-50%, -50%);
+}
