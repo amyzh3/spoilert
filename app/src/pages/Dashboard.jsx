@@ -74,7 +74,20 @@ function Dashboard() {
                 }}>
                 Add Food Item
             </button>
-            {showPopup && <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />}
+            {showPopup && (
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    background: '#D3D9DF',
+                    padding: '20px',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                }}>
+                    <AddItem onClose={() => setShowPopup(false)} onAddItem={handleAddItem} />
+                </div>
+            )}
 
             <div style={{ marginTop: '50px', width: '80%' }}>
                 {items.map((item, index) => (

@@ -71,7 +71,7 @@ function AddItemPage() {
             />
           </label>
           <label>
-            dateAdded:
+            Date Purchased:
             <input
               type="date"
               name="dateAdded"
