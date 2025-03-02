@@ -123,6 +123,12 @@ function Dashboard({ user }) {
                 Add Food Item
             </button>
 
+            {showPopup && (
+                <div className="popup-container">
+                    <AddItem onClose={() => setShowPopup(false)} />
+                </div>
+            )}
+
             <div style={{ marginTop: '50px', width: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {/* Left Button */}
                 <button 
