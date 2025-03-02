@@ -8,7 +8,7 @@ function AddItemPage() {
     itemName: "",
     units: "",
     dateAdded: "",
-    category: "fruits", // Default category
+    category: "fruits", 
     daysLeft: "",
     brand: "",
   });

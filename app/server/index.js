@@ -39,11 +39,11 @@ async function getCalories(item, brand){
   return await getGeminiQuery(prompt);
 }
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // For JSON parsing
 
-// Connect MongoDB
+app.use(cors());
+app.use(express.json()); 
+
+// connecting mongoDB
 mongoose.connect(process.env.MONGO_URI, {})
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
@@ -56,8 +56,8 @@ const itemSchema = new mongoose.Schema({
     dateAdded: String,
     category: String,
     daysLeft: Number, // calculated using GeminiAI
-    brand: String, // Optional
-    disposalSuggestion: String, // filled the first time it is asked to be displayed
+    brand: String, 
+    disposalSuggestion: String, 
     expirationDate: String,
     calories: Number,
   });

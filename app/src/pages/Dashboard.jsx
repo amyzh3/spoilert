@@ -24,6 +24,40 @@ function Dashboard() {
         "fish": "🐟",
         "milk": "🥛",
         "egg": "🥚",
+        "lemon": "🍋",
+        "broccoli": "🥦",
+        "tomato": "🍅",
+        "bacon": "🥓",
+        "eggplant" : "🍆",
+        "cherry" : "🍒",
+        "grape" : "🍇",
+        "peach" : "🍑",
+        "kiwi" : "🥝",
+        "mango" : "🥭",
+        "pineapple" : "🍍",
+        "avocado" : "🥑",
+        "melon" : "🍈",
+        "olive" : "🫒",
+        "carrot": "🥕",
+        "chicken": "🍗",
+        "fish": "🐟",
+        "shrimp": "🦐",
+        "crab": "🦀",
+        "lobster": "🦞",
+        "oyster": "🦪",
+        "cucumber": "🥒",
+        "potato": "🥔",
+        "sweet_potato": "🍠",
+        "corn": "🌽",
+        "mushroom": "🍄",
+        "garlic": "🧄",
+        "onion": "🧅",
+        "peanuts": "🥜",
+        "chestnut": "🌰",
+
+
+
+
     };
 
     const categoryToEmoji = {
@@ -35,7 +69,7 @@ function Dashboard() {
         "grains": "🌾",
         "beverages": "🧃",
     };
-    const username = "User"; // Replace with dynamic username if needed
+    const username = "User"; // Replace 
 
     useEffect(() => {
         fetchData();
