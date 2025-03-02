@@ -35,7 +35,7 @@
 }
 
 .add-item-button {
-  background-color: #49A93C;
+  background-color: #427AA1;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -46,7 +46,7 @@
   cursor: pointer;
   font-family: 'Karla', sans-serif;
   border-radius: 10px;
-  font-weight: 600;
+    font-weight: 600;
 }
 
 .add-item-button:hover {

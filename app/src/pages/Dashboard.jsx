@@ -150,11 +150,15 @@ function Dashboard({ user }) {
         }}>
             <h1 style={{
                 position: 'absolute',
-                top: '10px',
+                top: '-15px',
                 left: '20px',
-                fontSize: '24px',
-                fontWeight: 'bold'
-            }}>Hello, {user || "Guest"}</h1>
+                fontSize: '40px',
+                fontWeight: 'bold',
+                color: '#343A40',
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                width: '100%',
+            }}>Hello, <span style={{color: '#427AA1'}}>{user || "Guest"}</span> 👋</h1>
             
             <button 
                 onClick={() => setShowPopup(true)}
@@ -166,9 +170,11 @@ function Dashboard({ user }) {
                     color: 'white',
                     border: 'none',
                     padding: '10px 20px',
-                    borderRadius: '5px',
+                    borderRadius: '10px',
                     cursor: 'pointer',
-                    fontSize: '16px'
+                    fontSize: '16px',
+                    fontFamily: 'Karla, sans-serif',
+                    fontWeight: 'bold',
                 }}>
                 Add Food Item
             </button>
