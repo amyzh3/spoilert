@@ -56,6 +56,9 @@ const itemSchema = new mongoose.Schema({
     category: String,
     daysLeft: Number, // calculated using GeminiAI
     brand: String, // Optional
+    disposalSuggestion: String, // filled the first time it is asked to be displayed
+    expirationDate: String,
+
   });
 
 const Item = mongoose.model("Item", itemSchema);
@@ -64,6 +67,11 @@ const Item = mongoose.model("Item", itemSchema);
 app.post("/add-item", async (req, res) => {
     try {
       const newItem = new Item(req.body);
+      const dateAdded = new Date(newItem.dateAdded);
+      newItem.daysLeft = await getExpirationDays(newItem.itemName);
+      const expirationDate = new Date(dateAdded);
+      expirationDate.setDate(expirationDate.getDate() + newItem.daysLeft);
+      newItem.expirationDate = expirationDate.toISOString();
       await newItem.save();
       res.status(201).json({ message: "Item added successfully!" });
     } catch (error) {

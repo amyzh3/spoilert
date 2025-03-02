@@ -11,6 +11,7 @@ function App() {
     units: "",
     dateAdded: "",
     category: "fruits", // Default category
+    expirationDate: "",
     daysLeft: "",
     brand: "",
   });
@@ -42,7 +43,7 @@ function App() {
       console.error("Error:", error);
     }
     
-    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
+    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", expirationDate: "", daysLeft: "" });
   };
 
   return (
