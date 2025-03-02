@@ -21,7 +21,7 @@ async function getGeminiQuery(prompt){
   }
 }
 async function getExpirationDays(item, brand){
-  const prompt = "Act as a expiration date expert and tell me how many days on minimum a " + brand + item + " is good for consumption from its purchase date in the fridge. Only give me one number. Example: 10";
+  const prompt = "Act as a expiration date expert on food and tell me how many days on minimum a " + brand + item + " is good for consumption from its purchase date in the fridge. Only give me one number. Example: 10";
   
   return await getGeminiQuery(prompt);
 }
