@@ -27,7 +27,7 @@ async function getExpirationDays(item, brand){
 }
 
 async function getDisposalSuggestion(item, brand){
-  const prompt = "Act as a disposal sustainability advisor and tell me in three sentences or less how to dispose the food, " + brand + " " + item + ", after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
+  const prompt = "Act as a disposal sustainability advisor for food and tell me in three sentences or less how to dispose a " + brand + " " + item + " after it can't be consumed. If it's in a container (keep in mind the brand too), include what to do with disposing the container. Explain in easy, concise words so people are willing to read it.";
 
   return await getGeminiQuery(prompt);
 }
@@ -135,6 +135,10 @@ app.get("/get-all-items", async (req, res) => {
   try {
     const items = await Item.find({});
     const currentDate = new Date();
+    console.log(req.query.user);
+    const username = req.query.user;
+    let resetPoints = false;
+
 
     // calculate currDaysLeft for each item
     const updatedItems = items.map(item => {
@@ -161,7 +165,9 @@ app.get("/get-all-items", async (req, res) => {
         }
         // Check if item is expired
         const expired = Math.round(currDaysLeft) <= 0;
-
+        if (Math.round(currDaysLeft) <= 0) {
+            resetPoints = true;
+        }
 
         return { ...item, daysLeft: Math.round(currDaysLeft), percentage, expired };
     });
@@ -169,7 +175,18 @@ app.get("/get-all-items", async (req, res) => {
 
     // sort items by currDaysLeft (least to greatest)
     const sortedItems = updatedItems.sort((a, b) => a.daysLeft - b.daysLeft);
+    if(resetPoints) {
+        console.log('items are expired');
+        const updatedUser = await User.findOneAndUpdate(
+            { username },
+            { $set: { points: 0 } },
+            { new: true }
+        );
 
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    }
     res.status(200).json({ updatedItems: sortedItems });
   } catch (error) {
     res.status(500).json({ error: "Failed to get all items" });
