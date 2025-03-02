@@ -161,3 +161,18 @@
 .popup-container strong {
   color: black; /* Change this color to black */
 }
+
+/* Bouncing animation */
+@keyframes bounce {
+  0%, 100% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-5px);
+  }
+}
+
+.fruit-bounce {
+  display: inline-block;
+  animation: bounce 1.3s infinite ease-in-out;
+}
