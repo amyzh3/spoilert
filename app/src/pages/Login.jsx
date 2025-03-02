@@ -18,7 +18,8 @@ function Login({ setUser }) {
 
       if(response.status === 201){
         alert("signup successful!");
-        setUser(response.data.username);
+        setUser(signupUsername); // Update state
+        localStorage.setItem("username", signupUsername);
         navigate("/dashboard");
       }else{
         alert("Sign up failed.")
@@ -37,7 +38,8 @@ function Login({ setUser }) {
 
         if(response.status === 200){
           alert("Login successful!");
-          setUser(response.data.username);
+          setUser(loginUsername); // Update state
+          localStorage.setItem("username", loginUsername); 
           navigate("/dashboard");
         }else{
           alert(response.data.message)

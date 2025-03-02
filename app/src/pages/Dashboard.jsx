@@ -3,7 +3,7 @@ import '../App.css';
 import AddItem from './AddItem';
 import axios from "axios";
 
-function Dashboard() {
+function Dashboard({ user }) {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
@@ -104,7 +104,7 @@ function Dashboard() {
                 left: '20px',
                 fontSize: '24px',
                 fontWeight: 'bold'
-            }}>Hello, {username}</h1>
+            }}>Hello, {user || "Guest"}</h1>
             
             <button 
                 onClick={() => setShowPopup(true)}

@@ -8,17 +8,18 @@ import { useState } from "react";
 
 
 const App = () => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState("");  // Store username from Login
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard user={user} />} /> {/* Pass user prop */}
       </Routes>
     </BrowserRouter>
   );
 };
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
