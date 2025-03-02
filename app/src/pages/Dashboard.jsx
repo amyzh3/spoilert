@@ -257,10 +257,8 @@ function Dashboard({ user }) {
                                      backgroundColor: progressBarColor,
                                 }}></div>
                                 </div>
-                            
 
-                            {hoveredItem === item && (
-                                <div style={{
+                                <div className={`popup-container ${hoveredItem === item ? 'show' : ''}`} style={{
                                     position: 'absolute',
                                     top: '40%',
                                     left: '-40%',
