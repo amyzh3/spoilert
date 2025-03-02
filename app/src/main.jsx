@@ -4,6 +4,7 @@ import './index.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import Dashboard from "./pages/Dashboard"
+import Home from "./pages/Home"
 import { useState } from "react";
 
 
@@ -13,8 +14,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login setUser={setUser} />} />
-        <Route path="/dashboard" element={<Dashboard user={user} />} /> {/* Pass user prop */}
+        <Route path="/" element={<Home/>} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/dashboard" element={<Dashboard user={user} />} />
       </Routes>
     </BrowserRouter>
   );
