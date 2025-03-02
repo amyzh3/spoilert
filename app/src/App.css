@@ -149,7 +149,7 @@
 }
 
 .popup-container.show {
-  opacity: 0.8;
+  opacity: 95;
   transform: scale(1);
 }
 
