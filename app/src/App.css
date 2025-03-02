@@ -89,3 +89,42 @@
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
   z-index: 1000; /* Set a high z-index value */
 }
+
+.add-item-button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-item-button:hover {
+  background-color: darkgreen;
+}
+
+.cancel-button {
+  background-color: gray;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: darkgray;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 1rem;
+}

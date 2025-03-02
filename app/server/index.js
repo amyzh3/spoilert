@@ -144,25 +144,39 @@ app.get("/get-all-items", async (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-  const {username, password} = req.body;
-  User.findOne({username : username})
+  const {loginUsername, loginPassword} = req.body;
+  User.findOne({username : loginUsername})
   .then(user => {
       if(user) {
-          if(user.password === password){
-              res.json("Success")
+          if(user.password === loginPassword){
+              res.status(200).json({message: "Success"});
           }else{
-              res.json("The password is incorrect")
+              return res.status(400).json({ message: "The password is incorrect" });
           }
       }else{
-          res.json("No record existed")
+          return res.status(400).json({ message: "Username does not exist." });
       }
   })
 })
 
-app.post("/register", (req, res) => {
-  User.create(req.body)
-  .then(users => res.json(users))
-  .catch(err => res.json(err))
+app.post("/signup", async (req, res) => {
+  const {signupUsername, signupPassword} = req.body;
+  
+  try {
+    const existingUser = await User.findOne({ username: signupUsername });
+    if (existingUser) {
+      return res.status(400).json({ message: "Username is already taken." });
+    }
+
+    const newUser = new User({ username: signupUsername, password: signupPassword });
+
+    await newUser.save();
+
+    res.status(201).json({ message: "User successfully signed up!" });
+  } catch (err) {
+    console.error("Sign up failed.", err);
+    res.status(500).json({ message: "Sign up failed." });
+  }
 })
 
 // home route

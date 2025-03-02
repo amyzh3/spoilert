@@ -43,6 +43,11 @@ function AddItemPage() {
     setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
   };
 
+  const handleCancel = () => {
+    // reset the form fields
+    setNewItemData({ itemName: "", units: "", dateAdded: "", category: "Fruits", daysLeft: "" });
+  };
+
   return (
     <>
 
@@ -99,6 +104,7 @@ function AddItemPage() {
               onChange={handleChange}
             />
           </label>
+          <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
           <button type="submit" className="add-item-button">Add Item</button>
         </form>
       </div>

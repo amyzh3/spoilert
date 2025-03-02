@@ -25,7 +25,7 @@ function Login({ setUser }) {
       }
     } catch (error) {
       console.error('Error signing up:', error);
-      alert("An error occurred during signup.");
+      alert(error.response.data.message);
     }
 };
 
@@ -43,8 +43,8 @@ function Login({ setUser }) {
           alert(response.data.message)
         }
     } catch (error) {
-      console.error('Error logging in:', error);
-      alert("An error occurred during login");
+      console.error('Error logging in:', error.response.data.message);
+      alert(error.response.data.message);
     }
   };
 
