@@ -5,14 +5,16 @@ Contributors:
 - Senya Wong: senyawon@usc.edu
 - Elly Chong: yechong@usc.edu
 
-## Our Demo
-https://github.com/user-attachments/assets/192f144e-1e8b-4ae6-946d-fd9ef1216f5b
-
 
 ## Inspiration  
 Hello 👋 We're Team Spoilert! We've all faced the same problem—buying groceries with the best intentions, only to find wilted lettuce and moldy bread hiding in the fridge. It’s frustrating, wasteful, and harmful to the environment, yet it happens to so many of us. That’s why we built Spoilert, a web app that helps you keep track of your groceries, reduce food waste, and make sustainability fun!  
 
 Our app alerts you when your food is about to expire—hence the name **Spoil + Alert = Spoilert!**  
+
+---
+
+## Demo
+https://github.com/user-attachments/assets/192f144e-1e8b-4ae6-946d-fd9ef1216f5b
 
 ---
 
