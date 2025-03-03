@@ -175,7 +175,8 @@ app.get("/get-all-items", async (req, res) => {
 
     // sort items by currDaysLeft (least to greatest)
     const sortedItems = updatedItems.sort((a, b) => a.daysLeft - b.daysLeft);
-    if(resetPoints) {
+
+    if(username && resetPoints) {
         console.log('items are expired');
         const updatedUser = await User.findOneAndUpdate(
             { username },
@@ -304,7 +305,7 @@ app.post('/subtract-one', async (req, res) => {
                 console.log("user not found");
                 return res.status(404).json({ error: "User not found" });
             }
-            console.log(userObject);
+            // console.log(userObject);
             const updatedUser = await User.findOneAndUpdate(
                 { _id: userObject._id },
                 { $inc: { points: 10 } },
