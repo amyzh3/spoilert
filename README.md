@@ -14,7 +14,7 @@ Our app alerts you when your food is about to expire—hence the name **Spoil + 
 ---
 
 ## Demo
-https://github.com/user-attachments/assets/192f144e-1e8b-4ae6-946d-fd9ef1216f5b
+[![Spoilert Demo](https://github.com/user-attachments/assets/5b104f6d-1b57-43bd-bef2-c1c0b7572661)](https://youtu.be/6_dX2pBrqDQ)
 
 ---
 
